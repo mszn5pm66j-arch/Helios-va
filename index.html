@@ -1,338 +1,396 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HELIOS — Poste de Commandement Marché</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style>
-      body { background-color: #0B132B; color: #E2E8F0; font-family: system-ui, -apple-system, sans-serif; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>HELIOS — Poste de Commandement Marché</title>
+<style>
+  :root {
+    --bg: #0B0D10;
+    --card: #14171B;
+    --card-hover: #1A1E24;
+    --border: #2A2F36;
+    --text: #E6E8EA;
+    --muted: #8A9099;
+    --accent: #2B8CEE;
+    --accent-hover: #1A7CE8;
+    --green: #3DB93D;
+    --yellow: #FFC83D;
+    --red: #E04040;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { background: var(--bg); color: var(--text); padding-bottom: 90px; }
+  
+  /* En-tête & navigation carrousel */
+  .h-shell { position: sticky; top: 0; z-index: 100; background: rgba(11,13,16,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  .h-top { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; max-width: 600px; margin: 0 auto; }
+  .h-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; }
+  .h-mark { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); display: inline-block; cursor: pointer; border: none; }
+  .h-mark-lab { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; cursor: pointer; }
+  .h-mark-lab:hover { color: var(--text); }
+  .h-info { font-size: 13px; color: var(--muted); font-weight: 500; }
+  .h-nav { display: flex; align-items: center; gap: 8px; }
+  .h-btn { background: var(--card); border: 1px solid var(--border); color: var(--text); width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; transition: all 0.2s; }
+  .h-btn:hover:not(:disabled) { border-color: var(--accent); background: var(--card-hover); }
+  .h-btn:disabled { opacity: 0.3; cursor: default; }
+  
+  /* Barre de progression */
+  .h-prog { height: 2px; background: var(--border); width: 100%; position: relative; }
+  .h-bar { position: absolute; top: 0; left: 0; height: 100%; width: 20%; background: var(--accent); transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+
+  /* Conteneur des diapositives accueil */
+  .h-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; }
+  .h-track::-webkit-scrollbar { display: none; }
+  .h-slide { flex: 0 0 100%; width: 100%; scroll-snap-align: start; padding: 24px 16px; max-width: 600px; margin: 0 auto; min-height: 480px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+
+  /* Éléments des diapositives */
+  .h-eye { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); font-weight: 700; margin-bottom: 12px; }
+  .h-h1 { font-size: 38px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 8px; color: #fff; }
+  .h-sub { font-size: 18px; color: var(--text); font-weight: 600; margin-bottom: 20px; }
+  .h-rule { width: 40px; height: 3px; background: var(--border); border-radius: 2px; margin: 0 auto 24px auto; }
+  .h-tag { font-size: 15px; color: var(--muted); line-height: 1.5; max-width: 320px; margin-bottom: 32px; }
+  
+  .h-h2 { font-size: 26px; font-weight: 700; margin-bottom: 12px; color: #fff; }
+  .h-pill { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; width: 100%; max-width: 360px; margin-bottom: 16px; text-align: left; box-shadow: 0 4px 20px rgba(0,0,0,0.3); transition: border-color 0.2s; }
+  .h-pill:hover { border-color: var(--accent); }
+  .h-glass { text-decoration: none; color: inherit; display: flex; align-items: center; gap: 14px; }
+  .h-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
+  .h-dot.warn { background: var(--yellow); box-shadow: 0 0 8px var(--yellow); }
+  .h-dot.red { background: var(--red); box-shadow: 0 0 8px var(--red); }
+  .h-t { flex-grow: 1; }
+  .h-t small { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+  .h-t b { font-size: 14px; color: #fff; font-weight: 600; display: block; line-height: 1.3; }
+  .h-go { font-size: 18px; color: var(--muted); font-weight: 600; }
+  .h-hint { font-size: 12px; color: var(--muted); margin-top: 12px; opacity: 0.6; }
+
+  /* Vues internes (Atelier, etc.) */
+  body[data-view="home"] .wrap { display: none; }
+  body:not([data-view="home"]) .h-track, body:not([data-view="home"]) .h-prog { display: none; }
+  
+  .wrap { max-width: 600px; margin: 0 auto; padding: 20px 16px; }
+  header[data-v="expo"] { margin-bottom: 20px; }
+  header[data-v="expo"] .date { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  header[data-v="expo"] h1 { font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  header[data-v="expo"] .status { font-size: 14px; color: var(--muted); }
+  header[data-v="expo"] .total { font-size: 13px; color: var(--yellow); margin-top: 6px; font-weight: 500; }
+  
+  .params { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
+  .link { background: none; border: none; color: var(--accent); cursor: pointer; font-size: 13px; font-weight: 500; padding: 0; text-decoration: underline; }
+  .link:hover { color: #fff; }
+  
+  .relance { font-size: 12px; margin-top: 6px; padding: 6px 10px; border-radius: 6px; background: rgba(43,140,238,0.1); border: 1px solid rgba(43,140,238,0.3); color: var(--accent); }
+  .relance.ok { background: rgba(61,185,61,0.1); border-color: rgba(61,185,61,0.3); color: var(--green); }
+  .relance.err { background: rgba(224,64,64,0.1); border-color: rgba(224,64,64,0.3); color: var(--red); }
+  .reinit-info { font-size: 12px; color: var(--yellow); margin-top: 4px; }
+  .passages { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* Cartes et grilles */
+  .cards { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+  .card.todo { border-left: 4px solid var(--yellow); }
+  .card.op { border-left: 4px solid var(--accent); }
+  .card.op.sel { border-color: var(--accent); background: #16202D; }
+  .card.locked { opacity: 0.6; border-left-color: var(--muted); }
+  .card.copied { border-left-color: var(--green); }
+  
+  .top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+  .inst-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .inst { font-size: 18px; font-weight: 700; color: #fff; }
+  .badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; }
+  .b-todo { background: rgba(255,200,61,0.15); color: var(--yellow); }
+  .b-avenir { background: rgba(138,144,153,0.15); color: var(--muted); }
+  .tag { font-size: 12px; color: var(--muted); background: var(--border); padding: 2px 8px; border-radius: 4px; }
+  .tag.ex { background: rgba(224,64,64,0.15); color: var(--red); }
+
+  .action { font-size: 16px; font-weight: 600; margin-bottom: 10px; }
+  .action .buy { color: var(--green); }
+  .action .sell { color: var(--red); }
+  
+  .prices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; }
+  .prices small { display: block; font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+  .prices b { font-size: 15px; color: #fff; font-weight: 600; }
+  
+  .risk { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+  .risk strong { color: var(--text); }
+  .why { font-size: 13px; color: var(--muted); line-height: 1.4; margin-bottom: 14px; }
+  .verdict { font-size: 13px; color: var(--yellow); font-weight: 500; margin-bottom: 8px; }
+  .warn { font-size: 12px; color: var(--yellow); margin-top: 8px; line-height: 1.4; }
+
+  .btns { display: flex; gap: 10px; margin-top: 14px; }
+  .btn { flex: 1; padding: 10px 16px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; text-align: center; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover:not(:disabled) { background: var(--accent-hover); }
+  .btn-ghost { background: var(--border); color: var(--text); }
+  .btn-ghost:hover:not(:disabled) { background: #353C46; }
+  .btn:disabled { opacity: 0.4; cursor: default; }
+
+  /* Éléments divers */
+  .h-lect { font-size: 12px; color: var(--muted); line-height: 1.4; margin-bottom: 16px; background: var(--card); padding: 12px; border-radius: 10px; border: 1px solid var(--border); }
+  .h-dbar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(11,13,16,0.95); backdrop-filter: blur(12px); border-top: 1px solid var(--border); padding: 12px 16px; z-index: 90; }
+  .h-dbar-in { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
+  .h-dbar-info { font-size: 12px; color: var(--muted); }
+  .h-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 16px; }
+  .h-tab { background: var(--card); border: 1px solid var(--border); color: var(--muted); padding: 8px 4px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; text-align: center; transition: all 0.2s; }
+  .h-tab.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .h-tab b { display: block; font-size: 14px; margin-top: 2px; }
+  
+  .h-gains { font-size: 13px; margin-bottom: 16px; background: var(--card); padding: 12px; border-radius: 10px; border: 1px solid var(--border); }
+  .h-op-note, .h-note-att { font-size: 12px; color: var(--muted); margin-bottom: 16px; line-height: 1.4; }
+  
+  .empty { font-size: 14px; color: var(--muted); text-align: center; padding: 30px 0; }
+  .foot { font-size: 11px; color: var(--muted); text-align: center; margin-top: 30px; line-height: 1.4; }
+
+  /* Tiroir / Fiche / Paramètres */
+  .backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 200; }
+  .sheet { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); border-radius: 20px 20px 0 0; max-height: 90vh; overflow-y: auto; z-index: 210; padding: 20px; box-shadow: 0 -10px 40px rgba(0,0,0,0.5); }
+  .sheet-inner { max-width: 500px; margin: 0 auto; }
+  .sheet h2 { font-size: 20px; font-weight: 700; margin-bottom: 16px; color: #fff; }
+  
+  .ticket { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 10px; margin-bottom: 16px; font-size: 13px; }
+  .ticket dt { color: var(--muted); }
+  .ticket dd { font-weight: 600; text-align: right; color: #fff; }
+
+  .sim-wrap { margin-top: 16px; background: rgba(0,0,0,0.2); padding: 14px; border-radius: 12px; }
+  .sim-wrap h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #fff; }
+  .leg { display: flex; gap: 12px; font-size: 11px; color: var(--muted); margin-bottom: 10px; flex-wrap: wrap; }
+  .leg span { display: flex; align-items: center; gap: 4px; }
+  .leg i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .sim { width: 100%; overflow-x: auto; background: #0B0D10; border-radius: 8px; padding: 8px; }
+
+  /* Toast notification */
+  .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #222B38; color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 13px; font-weight: 500; border: 1px solid var(--border); z-index: 300; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+
+  /* Atelier / Navigation Secondaire */
+  body[data-view="atelier"] .wrap { display: block; }
+  .h-subnav { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--border); background: rgba(11,13,16,0.92); }
+  .h-crumb { font-size: 13px; color: var(--muted); display: flex; gap: 6px; }
+  .h-crumb b { color: #fff; }
+  .h-msheet { position: fixed; inset: 0; background: rgba(11,13,16,0.95); z-index: 250; padding: 24px; overflow-y: auto; }
+</style>
 </head>
-<body class="min-h-screen flex flex-col">
-    <header class="border-b border-slate-800 bg-[#0B132B]/90 sticky top-0 z-50 backdrop-blur">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <span class="text-xl font-bold tracking-wider text-cyan-400">HELIOS</span>
-                <span class="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">v7.2</span>
-            </div>
-            <nav class="hidden md:flex space-x-6 text-sm text-slate-300">
-                <a href="#veille" class="hover:text-cyan-400 transition">Veille</a>
-                <a href="#atelier" class="hover:text-cyan-400 transition">Atelier</a>
-            </nav>
-        </div>
+<body data-view="home" data-otabs="saisir">
+
+  <!-- En-tête principal -->
+  <div class="h-shell">
+    <div class="h-top">
+      <div class="h-brand">
+        <button type="button" class="h-mark" title="Réinitialiser"></button>
+        <span class="h-mark-lab">Helios</span>
+      </div>
+      <div class="h-info" id="h-num">Accueil</div>
+      <div class="h-nav">
+        <button type="button" class="h-btn" id="h-prev" disabled>‹</button>
+        <button type="button" class="h-btn" id="h-next">›</button>
+        <button type="button" class="h-btn" id="h-menu">☰</button>
+      </div>
+    </div>
+    <div class="h-prog"><div class="h-bar" id="h-bar"></div></div>
+  </div>
+
+  <!-- Carrousel Accueil -->
+  <div class="h-track" id="h-track"></div>
+
+  <!-- Vues secondaires (Atelier, etc.) -->
+  <div class="wrap" id="h-subview">
+    <div class="h-subnav">
+      <div class="h-crumb"><span id="h-peye">Atelier</span><span>/</span><b id="h-crumbt">Architecture</b></div>
+      <button type="button" class="h-btn" id="h-back">✕</button>
+    </div>
+    <div style="padding: 24px 0;" id="h-subcontent">
+      <h2 id="h-ptitle" style="font-size: 24px; font-weight: 700; margin-bottom: 16px; color: #fff;">Atelier</h2>
+      <p style="font-size: 14px; color: var(--muted); line-height: 1.5;">Plateforme d'aide à la décision institutionnelle et de gouvernance d'investissement. Lancement sur 12 instruments avec exécution manuelle contrôlée sur ProRealTime.</p>
+    </div>
+  </div>
+
+  <!-- Contenu Principal des Ordres & Veille -->
+  <div class="wrap">
+    <header data-v="expo">
+      <p class="date" id="today"></p>
+      <h1>Ordres à saisir</h1>
+      <p class="status" id="status">Chargement…</p>
+      <p class="total" id="total" hidden></p>
+      <div class="params" id="params" hidden>
+        <span id="paramsText"></span>
+        <button type="button" class="link" id="btnParams">Modifier</button>
+        <button type="button" class="link" id="btnRun" hidden>Relancer la veille</button>
+      </div>
+      <p class="relance" id="relanceInfo" hidden></p>
+      <p class="reinit-info" id="reinitInfo" hidden></p>
+      <p class="passages" id="passagesInfo" hidden></p>
     </header>
 
-    <main class="flex-grow max-w-7xl mx-auto px-4 py-8 w-full space-y-12">
-        <section id="veille" class="space-y-6">
-            <div class="border-b border-slate-800 pb-4">
-                <h1 class="text-2xl font-semibold text-white">Écran 2 · Veille & Synthèse</h1>
-                <p class="text-sm text-slate-400 mt-1">Analyse institutionnelle croisée et calendrier des décisions.</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-slate-900/60 border border-slate-800 p-6 rounded-xl">
-                    <h2 class="text-cyan-400 font-medium mb-2">1 · Ordinaire</h2>
-                    <p class="text-sm text-slate-300">Passages programmés selon le calendrier macroéconomique et monétaire.</p>
-                </div>
-                <div class="bg-slate-900/60 border border-slate-800 p-6 rounded-xl">
-                    <h2 class="text-cyan-400 font-medium mb-2">2 · Extraordinaire</h2>
-                    <p class="text-sm text-slate-300">Déclenchement instantané suite à un fait imprévu ou géostratégique majeur.</p>
-                </div>
-                <div class="bg-slate-900/60 border border-slate-800 p-6 rounded-xl">
-                    <h2 class="text-cyan-400 font-medium mb-2">3 · Manuel</h2>
-                    <p class="text-sm text-slate-300">Votre demande directe de relance de veille ou de modification des paramètres.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="atelier" class="space-y-6">
-            <div class="border-b border-slate-800 pb-4">
-                <h1 class="text-2xl font-semibold text-white">Atelier & Architecture</h1>
-                <p class="text-sm text-slate-400 mt-1">Référentiel doctrine, skills et connecteurs.</p>
-            </div>
-            <div class="bg-slate-900/60 border border-slate-800 p-6 rounded-xl space-y-4">
-                <p class="text-sm text-slate-300">Plateforme hybride d'aide à la décision et de gouvernance d'investissement. Lancement initial sur 12 instruments avec exécution manuelle contrôlée sur ProRealTime.</p>
-                <div class="flex flex-wrap gap-4 pt-2">
-                    <a href="https://claude.ai/artifact/YVqBtnFjexorBQwPfxCeoK" target="_blank" class="text-xs px-3 py-2 rounded bg-cyan-950/50 border border-cyan-800 text-cyan-300 hover:bg-cyan-900/50 transition">Charte conceptuelle ↗</a>
-                    <a href="https://claude.ai/artifact/CBSWUVTJfWBEbS7NDM7Mvr" target="_blank" class="text-xs px-3 py-2 rounded bg-cyan-950/50 border border-cyan-800 text-cyan-300 hover:bg-cyan-900/50 transition">Document de conception ↗</a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <div class="wrap">
-      <header data-v="expo">
-        <p class="date" id="today"></p>
-        <h1>Ordres à saisir</h1>
-        <p class="status" id="status">Chargement…</p>
-        <p class="total" id="total" hidden></p>
-        <p class="legend" id="legend" hidden></p>
-        <div class="params" id="params" hidden>
-          <span id="paramsText"></span>
-          <button type="button" class="link" id="btnParams">Modifier</button>
-          <button type="button" class="link" id="btnRun" hidden>Relancer la veille</button>
-        </div>
-        <p class="relance" id="relanceInfo" hidden></p>
-        <p class="reinit-info" id="reinitInfo" hidden></p>
-        <p class="passages" id="passagesInfo" hidden></p>
-      </header>
-      
-      <section class="card h-params" id="pSheet" data-v="expo" hidden>
-        <div class="sheet-inner">
-          <h3 class="h-ph" id="pTitle">Mes paramètres</h3>
-          <div class="field">
-            <label for="p-capital" id="p-capLabel">Capital</label>
-            <input type="text" id="p-capital" inputmode="decimal" autocomplete="off" placeholder="ex. 16 000">
-            <div class="chips" id="p-devise" role="radiogroup" aria-label="Devise du capital">
-              <label class="chip"><input type="radio" name="devise" value="USD"><span>Dollars ($)</span></label>
-              <label class="chip"><input type="radio" name="devise" value="EUR"><span>Euros (€)</span></label>
-            </div>
-          </div>
-          <fieldset class="field">
-            <legend>Période d'attente</legend>
-            <div class="chips" id="p-horizon"></div>
-            <small>Combien de temps vous êtes prêt à garder une position.</small>
-          </fieldset>
-          <div class="field">
-            <label for="p-perte">Perte maximale par position (%)</label>
-            <input type="text" id="p-perte" inputmode="decimal" autocomplete="off" placeholder="ex. 2">
-          </div>
-          <div class="field">
-            <label for="p-maxpos">Montant maximal investi par position (%)</label>
-            <input type="text" id="p-maxpos" inputmode="decimal" autocomplete="off" placeholder="ex. 25">
-            <small>C'est souvent ce réglage qui fixe la quantité : l'augmenter augmente le risque réel.</small>
-          </div>
-          <ul class="errors" id="pErrors" hidden></ul>
-          <button type="button" class="btn btn-primary" id="pSave">Enregistrer</button>
-          <small class="note" id="pRunNote"></small>
-          <div class="reinit">
-            <h3>Compte du courtier réinitialisé ?</h3>
-            <p>Appuyez dès que vous remettez votre compte à zéro chez le courtier. Le moment exact est enregistré (jour, heure, minute, seconde) : les ordres exécutés ou écartés avant ce moment sont périmés (ils restent dans l'historique), puis la veille se relance.</p>
-            <p class="reinit-last" id="pReinitLast" hidden></p>
-            <button type="button" class="btn btn-ghost" id="pReinit">J'ai réinitialisé mon compte maintenant</button>
-          </div>
-          <button type="button" class="btn btn-ghost" id="pCancel">Annuler</button>
-        </div>
-      </section>
-
-      <section class="syn-sec" data-v="veille" id="synSec" aria-labelledby="h-syn" hidden>
-        <h2 id="h-syn">Ce qui vient de se passer</h2>
-        <p>Synthèse des événements majeurs et ce qu'ils changent pour vos ordres.</p>
-        <div class="syn-list" id="synList"></div>
-      </section>
-
-      <p class="h-lect" data-v="decision">Lecture seule : chaque ordre copié depuis l'<a href="#ordres">Espace opérationnel</a> s'inscrit ici automatiquement. Voyant orange : copié, saisie à contrôler. Vert : saisie conforme. Rouge : erreur de saisie. Le contrôle se fait dans l'Espace opérationnel (bouton du tiroir) ou en envoyant à Claude une capture de ProRealTime avec le mot « contrôle ».</p>
-      <div class="cards" id="cards" data-v="decision"></div>
-      <div class="h-dbar" id="dbar" data-v="ordres">
-        <div class="h-dbar-in">
-          <p class="h-dbar-info" id="dbarInfo">Aucun ordre sélectionné.</p>
-          <div class="btns"><button type="button" class="btn btn-ghost" id="selAll">Tout sélectionner</button><button type="button" class="btn btn-primary" id="copyN" disabled>Copier la sélection (0)</button><button type="button" class="btn btn-primary" id="doneN" disabled hidden>Tout est saisi (0)</button></div>
-        </div>
-      </div>
-      <div class="h-tabs" id="otabs" data-v="ordres" role="tablist">
-        <button type="button" class="h-tab" data-tab="saisir" data-label="À saisir" role="tab">À saisir</button>
-        <button type="button" class="h-tab" data-tab="attente" data-label="En attente" role="tab">En attente</button>
-        <button type="button" class="h-tab" data-tab="position" data-label="En position" role="tab">En position</button>
-        <button type="button" class="h-tab" data-tab="historique" data-label="Historique" role="tab">Historique</button>
-      </div>
-      <p class="h-note-att" data-v="ordres">Passage « En position » : à la main (bouton « En position » du tiroir) ou par une capture de ProRealTime envoyée à Claude avec le mot « contrôle ». Une seule étape de contrôle.</p>
-      <div class="h-gains" id="gains" data-v="ordres"></div>
-      <p class="h-op-note" data-v="ordres">Chaque ordre copié quitte « À saisir » et passe aussitôt dans « En attente » : il ne peut plus être copié deux fois. Pas saisi finalement ? En attente › « Pas saisi » le remet ici.</p>
-      <div class="cards" id="opCards" data-v="ordres"></div>
-      <div class="cards" id="execCards" data-v="ordres"></div>
-
-      <section class="agenda" id="agenda" data-v="veille" aria-labelledby="h-agenda" hidden>
-        <h2 id="h-agenda">Dates majeures</h2>
-        <p class="ag-sub">Ce qui est attendu : macro (banques centrales, statistiques, pétrole, géopolitique) puis micro (résultats des sociétés).</p>
-        <ul class="agenda-list" id="agendaList"></ul>
-        <button type="button" class="link" id="agendaMore" hidden></button>
-      </section>
-      <section class="card h-charte" id="raisons" data-v="veille">
-        <h3 style="color:var(--accent)">Trois raisons de déclenchement</h3>
-        <p>1 · Ordinaire : le calendrier, aux passages programmés.</p>
-        <p>2 · Extraordinaire : un fait imprévu.</p>
-        <p>3 · Extraordinaire : votre demande, « Relancer la veille » ou « Modifier ».</p>
-      </section>
-
-      <details class="history" id="history" data-v="ordres" hidden>
-        <summary id="histTitle">Historique</summary>
-        <ul class="hist" id="histList"></ul>
-      </details>
-
-      <p class="foot" data-v="ordres">Helios n'est pas un conseil en investissement. Les ordres sont calculés à partir des zones trouvées par la plateforme et de vos limites de risque ; vous êtes le seul donneur d'ordre : vous saisissez chaque ordre dans ProRealTime, Helios n'en envoie aucun.</p>
-    </div>
-
-    <div class="backdrop" id="backdrop" hidden></div>
-    <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" hidden>
+    <!-- Paramètres -->
+    <section class="card" id="pSheet" hidden style="margin-bottom: 20px;">
       <div class="sheet-inner">
-        <h2 id="sheetTitle">Fiche de saisie</h2>
-        <dl class="ticket" id="ticket"></dl>
-        <p class="warn" id="ticketWarn"></p>
-        <button type="button" class="btn btn-ghost" id="btnCopy">Copier la fiche</button>
-        <div class="sim-wrap">
-          <h3>Guide de saisie</h3>
-          <p class="leg"><span><i style="background:#FFC83D"></i>jaune : à saisir</span><span><i style="background:#fff"></i>bord blanc : à appuyer</span><span><i style="background:#E04040"></i>rouge : perte max</span></p>
-          <div class="sim" id="sim"></div>
-          <button type="button" class="btn btn-ghost" id="btnPng">Télécharger l'image</button>
-          <small>Reproduction des écrans de l'iPhone avec les chiffres de cet ordre. Gardez-la dans vos photos pour la suivre pas à pas.</small>
+        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px; color: #fff;">Mes paramètres</h3>
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 12px; color: var(--muted); display: block; margin-bottom: 4px;" id="p-capLabel">Capital</label>
+          <input type="text" id="p-capital" style="width: 100%; padding: 10px; background: #0B0D10; border: 1px solid var(--border); border-radius: 8px; color: #fff; font-size: 14px;" placeholder="ex. 16 000">
         </div>
+        <button type="button" class="btn btn-primary" id="pSave" style="width: 100%; margin-top: 10px;">Enregistrer</button>
+        <button type="button" class="btn btn-ghost" id="pCancel" style="width: 100%; margin-top: 6px;">Annuler</button>
+      </div>
+    </section>
+
+    <!-- Synthèse & Écran 2 Veille -->
+    <section class="cards" id="synSec" hidden style="margin-bottom: 20px;">
+      <h2>Ce qui vient de se passer</h2>
+      <div id="synList"></div>
+    </section>
+
+    <p class="h-lect" data-v="decision">Lecture seule : chaque ordre copié depuis l'Espace opérationnel s'inscrit ici automatiquement.</p>
+    <div class="cards" id="cards" data-v="decision"></div>
+
+    <!-- Barre d'action Espace Opérationnel -->
+    <div class="h-dbar" id="dbar" data-v="ordres">
+      <div class="h-dbar-in">
+        <p class="h-dbar-info" id="dbarInfo">Aucun ordre sélectionné.</p>
         <div class="btns">
-          <button type="button" class="btn btn-primary" id="btnDone">Saisi dans ProRealTime</button>
-          <button type="button" class="btn btn-ghost" id="btnCancel">Annuler</button>
+          <button type="button" class="btn btn-ghost" id="selAll">Tout sélectionner</button>
+          <button type="button" class="btn btn-primary" id="copyN" disabled>Copier la sélection (0)</button>
+          <button type="button" class="btn btn-primary" id="doneN" disabled hidden>Tout est saisi (0)</button>
         </div>
       </div>
     </div>
-    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
-    <footer class="border-t border-slate-800 bg-[#0B132B] py-6 text-center text-xs text-slate-500">
-        HELIOS · PSS (Praetorian Sentinel Smart) · Tous droits réservés
-    </footer>
+    <!-- Onglets Espace Opérationnel -->
+    <div class="h-tabs" id="otabs" data-v="ordres">
+      <button type="button" class="h-tab on" data-tab="saisir">À saisir<b id="cnt-saisir">0</b></button>
+      <button type="button" class="h-tab" data-tab="attente">En attente<b id="cnt-attente">0</b></button>
+      <button type="button" class="h-tab" data-tab="position">En position<b id="cnt-position">0</b></button>
+      <button type="button" class="h-tab" data-tab="historique">Historique<b id="cnt-historique">0</b></button>
+    </div>
 
-    <script>
-    (() => {
-      const MULT = {GC:100};
-      const UNIT_WORD = code => code === 'GC' ? ['contrat','contrats'] : code === 'XAU/USD' ? ['once','onces'] : ['action','actions'];
-      const TICK = code => code === 'GC' ? 0.1 : 0.01;
+    <div class="h-gains" id="gains" data-v="ordres"></div>
+    <div class="cards" id="opCards" data-v="ordres"></div>
+    <div class="cards" id="execCards" data-v="ordres"></div>
 
-      let db = null, canWrite = null, ready = false, R = null;
-      let props = [], decisions = {}, loadedProps = false, loadedDec = false, current = null, toastTimer = null;
-      let events = [], showAllEvents = false, surv = {}, saisies = {}, ctl = null, attendu = [], shots = [];
-      let syntheses = [];
-      const openSyn = new Set(); let synInit = false;
-      const safeUrl = u => /^https:\/\//i.test(String(u || '')) ? String(u) : '';
-      const listHtml = arr => (Array.isArray(arr) && arr.length) ? `<ul>${arr.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '';
-      function renderSyntheses(){
-        const sec = $('#synSec'), list = $('#synList');
-        const since = addDaysStr(-30);
-        const items = syntheses.filter(s => (s.date || '') >= since)
-          .sort((a, b) => ((b.date || '') + (b.heure || '')).localeCompare((a.date || '') + (a.heure || '')));
-        sec.hidden = items.length === 0;
-        if (!items.length) return;
-        if (!synInit){ openSyn.add(items[0].id); synInit = true; }
-        const t = todayStr();
-        list.innerHTML = items.map(s => {
-          const block = (cls, title, arr) => (Array.isArray(arr) && arr.length) ? `<div class="horizon ${cls}"><h3>${title}</h3>${listHtml(arr)}</div>` : '';
-          const impact = Array.isArray(s.impact) && s.impact.length ? `<h4>Effet sur vos instruments</h4><ul>${s.impact.map(i => `<li><b>${esc(i.instruments)}</b> : ${esc(i.effet)}</li>`).join('')}</ul>` : '';
-          const srcs = Array.isArray(s.sources) && s.sources.length ? `<h4>Sources</h4><ul>${s.sources.map(x => { const u = safeUrl(x.url); return `<li>${u ? `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(x.titre || u)}</a>` : esc(x.titre)}</li>`; }).join('')}</ul>` : '';
-          const faits = Array.isArray(s.faits) && s.faits.length ? `<h4>Ce qui a été décidé ou annoncé</h4>${listHtml(s.faits)}` : '';
-          const more = (faits || impact || srcs) ? `<details class="syn-more"><summary>Les faits, l'effet sur vos instruments et les sources</summary>${faits}${impact}${srcs}</details>` : '';
-          return `<details class="syn" data-id="${esc(s.id)}"${openSyn.has(s.id) ? ' open' : ''}>
-            <summary>
-              <span class="syn-when">${s.date === t ? 'Aujourd’hui' : esc(fmtDay(s.date))}${s.heure ? ' · ' + esc(fmtHour(s.heure)) : ''}${s.categorie ? ' · ' + esc(s.categorie) : ''}${s.statut === 'provisoire' ? ' <span class="pill p-prov">provisoire</span>' : ''}</span>
-              <span class="syn-title">${esc(s.titre)}</span>
-            </summary>
-            <div class="syn-body">
-              ${s.resume ? `<p class="syn-resume">${esc(s.resume)}</p>` : ''}
-              ${s.statut_note ? `<p class="syn-note">${esc(s.statut_note)}</p>` : ''}
-              ${block('urgent', 'À faire tout de suite', s.urgent)}
-              ${block('moyen', 'Dans les prochaines semaines', s.moyen_terme)}
-              ${block('long', 'À plus long terme', s.long_terme)}
-              ${more}
-            </div>
-          </details>`;
-        }).join('');
-      }
+    <section class="cards" id="agenda" hidden style="margin-bottom: 20px;">
+      <h2>Dates majeures</h2>
+      <ul id="agendaList" style="list-style: none; margin-top: 8px;"></ul>
+    </section>
 
-      const $ = s => document.querySelector(s);
-      const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-      const px = new Intl.NumberFormat('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2});
-      const usd = new Intl.NumberFormat('fr-FR', {style:'currency', currency:'USD', maximumFractionDigits:0});
-      const eur = new Intl.NumberFormat('fr-FR', {style:'currency', currency:'EUR', maximumFractionDigits:0});
-      const pad = n => String(n).padStart(2, '0');
-      const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; };
-      const fmtDate = s => { if (!s) return '—'; const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d).toLocaleDateString('fr-FR', {day:'numeric', month:'long'}); };
-      const MOIS = {janv:1, 'févr':2, fevr:2, mars:3, avr:4, mai:5, juin:6, juil:7, 'août':8, aout:8, sept:9, oct:10, nov:11, 'déc':12, dec:12};
-      function lockOf(p){
-        const v = String(p.verdict || '').trim();
-        if (!/^Attendre/i.test(v)) return null;
-        const m = v.match(/\((\d{1,2})(?:er)?\s+([a-zéû]+)\.?\s*(\d{4})?\)/i);
-        if (!m || !MOIS[m[2].toLowerCase()]) return {date: null};
-        const t = new Date(); let y = m[3] ? +m[3] : t.getFullYear();
-        let d = `${y}-${pad(MOIS[m[2].toLowerCase()])}-${pad(+m[1])}`;
-        if (!m[3] && (new Date(d) - t) < -180 * 864e5){ y++; d = `${y}-${pad(MOIS[m[2].toLowerCase()])}-${pad(+m[1])}`; }
-        return d > todayStr() ? {date: d} : null;
-      }
-      const cpNum = v => String(Number(Number(v).toFixed(2)));
-      const cpHtml = (inst, qty, entry, stop) => `<div class="h-cp"><span>ProRealTime ne lit pas le presse-papiers : ouvrez ${esc(inst)}, puis copiez et collez chaque champ.</span><button type="button" data-cp="${esc(inst)}">Instrument ${esc(inst)}</button><button type="button" data-cp="${qty}">Quantité ${qty}</button><button type="button" data-cp="${cpNum(entry)}">Limite ${cpNum(entry)}</button><button type="button" data-cp="${cpNum(stop)}">Stop ${cpNum(stop)}</button></div>`;
-      const fmtShort = s => { if (!s) return ''; const [y,m,d] = s.split('-'); return `${d}/${m}/${y}`; };
-      const fmtStamp = iso => { const d = new Date(iso); return isNaN(d) ? '' : d.toLocaleDateString('fr-FR', {day:'numeric', month:'short'}); };
-      const writable = () => !!db && canWrite !== false;
-      const localDay = iso => { const d = new Date(iso); return isNaN(d) ? '' : `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; };
-      const fmtFull = iso => { const d = new Date(iso); if (isNaN(d)) return ''; return `${d.toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'})} à ${d.getHours()} h ${pad(d.getMinutes())} min ${pad(d.getSeconds())} s`; };
-      const fmtHM = d => `${d.getHours()} h ${pad(d.getMinutes())}`;
-      const activeDec = p => { const d = decisions[p.id]; if (!d) return null; if (R && R.reinit_le && String(d.le || '') < String(R.reinit_le)) return null; return d; };
+    <p class="foot" data-v="ordres">Helios n'est pas un conseil en investissement. Vous êtes le seul donneur d'ordre.</p>
+  </div>
 
-      const HORIZONS = {jours:{label:'Quelques jours', sub:'2 à 5 j'}, semaines:{label:'1 à 3 semaines'}, mois:{label:'1 à 3 mois'}};
-      const parseNum = s => { const t = String(s ?? '').replace(/[\s  €$%]/g, '').replace(',', '.'); return /^\d*\.?\d+$/.test(t) ? Number(t) : NaN; };
-      function renderParams(){
-        const box = $('#params');
-        box.hidden = !db || !R;
-        if (!R) return;
-        const h = HORIZONS[R.horizon];
-        $('#paramsText').innerHTML = `${esc(R.devise === 'USD' ? usd.format(R.capital) : eur.format(R.capital))} · ${h ? esc(h.label) : '<span class="missing">période d’attente à choisir</span>'} · perte max ${esc(String(R.risque_pct).replace('.', ','))} % · ${esc(String(R.max_position_pct ?? 100).replace('.', ','))} % max par position`;
-        $('#btnParams').hidden = !writable();
-        $('#btnRun').hidden = !writable() || !mcp;
-        const ri = $('#reinitInfo');
-        ri.hidden = !R.reinit_le;
-        if (R.reinit_le) ri.textContent = `Compte réinitialisé le ${fmtFull(R.reinit_le)} : les décisions antérieures sont périmées.`;
-        renderRelance(); renderPassages();
-      }
+  <!-- Fiche de saisie & Guide modale -->
+  <div class="backdrop" id="backdrop" hidden></div>
+  <div class="sheet" id="sheet" hidden>
+    <div class="sheet-inner">
+      <h2 id="sheetTitle">Fiche de saisie</h2>
+      <dl class="ticket" id="ticket"></dl>
+      <p class="warn" id="ticketWarn"></p>
+      <button type="button" class="btn btn-ghost" id="btnCopy" style="width: 100%; margin-bottom: 12px;">Copier la fiche</button>
+      <div class="sim-wrap">
+        <h3>Guide de saisie</h3>
+        <div class="sim" id="sim"></div>
+      </div>
+      <div class="btns" style="margin-top: 16px;">
+        <button type="button" class="btn btn-primary" id="btnDone">Saisi dans ProRealTime</button>
+        <button type="button" class="btn btn-ghost" id="btnCancel">Annuler</button>
+      </div>
+    </div>
+  </div>
 
-      const TRIGGER_ID = 'trig_01EESxXcNGWgJ6o43Nu2DDoS';
-      const SERVER = 'Claude Code Remote';
-      const PLAFOND_JOUR = 7, ORDINAIRES = 3, EXTRA_MAX = PLAFOND_JOUR - ORDINAIRES;
-      let mcp, relances = [], passages = [], running = false;
-      const fmtTime = iso => { const d = new Date(iso); return isNaN(d) ? '' : d.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}); };
-      const extraToday = () => { const t = todayStr(); return relances.filter(r => r.statut === 'envoyée' && localDay(r.demande_le) === t).length + passages.filter(x => x.declencheur === 'evenement' && localDay(x.le) === t).length; };
-      const tzOffset = (tz, d) => { const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', {timeZone: tz, hourCycle:'h23', year:'numeric', month:'numeric', day:'numeric', hour:'numeric', minute:'numeric'}).formatToParts(d).map(x => [x.type, x.value])); return Math.round((Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute) - Math.floor(d.getTime() / 60000) * 60000) / 60000); };
-      function ordinaryToday(){
-        const now = new Date();
-        const at = (tz, h, m) => { const off = tzOffset(tz, now); return new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) + (h * 60 + m - off) * 60000); };
-        return [
-          {key:'matin', label:'veille complète', when: at('Africa/Algiers', 6, 39)},
-          {key:'midi', label:'surveillance', when: at('Africa/Algiers', 12, 27)},
-          {key:'avant_wall_street', label:'avant Wall Street', when: at('America/New_York', 8, 57)}
-        ];
-      }
-      function renderPassages(){
-        const el = $('#passagesInfo');
-        if (!db || !R){ el.hidden = true; return; }
-        const t = todayStr(), wd = new Date().getDay();
-        const todays = passages.filter(x => localDay(x.le) === t);
-        const ord = (wd === 0 || wd === 6) ? 'pas de veille ordinaire le week-end'
-          : ordinaryToday().map(o => `${o.label}${todays.some(x => x.declencheur === o.key) ? ' ✓' : ''}`).join(' · ');
-        el.textContent = `Déclenchements aujourd'hui : ${ord} · extraordinaires ${extraToday()}.`;
-        el.hidden = false;
-      }
-      function renderRelance(){
-        const el = $('#relanceInfo');
-        const last = relances[0];
-        const n = extraToday();
-        $('#pRunNote').textContent = mcp === undefined ? ''
-          : mcp === null ? 'Relance automatique indisponible sur cet affichage : vos réglages seront pris en compte à la prochaine veille.'
-          : `Si le capital, l'attente ou le risque changent, la veille se relance seule en quelques minutes et vous prévient sur votre téléphone. Passages extraordinaires aujourd'hui : ${n} (plafonds : voir la charte).`;
-        if (!last){ el.hidden = true; return; }
-        el.hidden = false;
-        el.className = 'relance' + (last.statut === 'envoyée' ? ' ok' : last.statut === 'échec' ? ' err' : '');
-        el.textContent = last.statut === 'envoyée'
-          ? `Veille relancée à ${fmtTime(last.demande_le)} : les nouvelles propositions apparaîtront ici dans quelques minutes.`
-          : last.statut === 'échec' ? `Relance de ${fmtTime(last.demande_le)} non envoyée : ${last.erreur || 'erreur inconnue'}.`
-          : `Relance en cours d'envoi…`;
-      }
+  <!-- Menu mobile global -->
+  <div class="h-msheet" id="h-msheet" hidden>
+    <div style="max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 style="font-size: 20px; color: #fff;">Menu Helios</h2>
+        <button type="button" class="h-btn" id="h-mclose">✕</button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <a href="#veille" class="h-pill" style="max-width: none; display: block; text-decoration: none; color: #fff;"><b>Veille & Synthèse</b><small style="color: var(--muted);">Écran 2</small></a>
+        <a href="#atelier" class="h-pill" style="max-width: none; display: block; text-decoration: none; color: #fff;"><b>Atelier & Architecture</b><small style="color: var(--muted);">Référentiel doctrine</small></a>
+      </div>
+    </div>
+  </div>
 
-      function toast(msg){
-        const t = $('#toast'); t.textContent = msg; t.hidden = false;
-        clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, Math.max(3200, String(msg).length * 60));
-      }
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
-      async function connect(){
-        const c = window.claude;
-        if (c && typeof c.use === 'function'){ try { db = await c.use('db'); } catch { db = null; } }
-        ready = true;
-      }
-      connect();
-    })();
-    </script>
+<script>
+(() => {
+  const MULT = {GC:100};
+  const UNIT_WORD = code => code === 'GC' ? ['contrat','contrats'] : code === 'XAU/USD' ? ['once','onces'] : ['action','actions'];
+  const TICK = code => code === 'GC' ? 0.1 : 0.01;
+
+  let db = null, canWrite = null, ready = false, R = null;
+  let props = [], decisions = {}, loadedProps = false, loadedDec = false, current = null, toastTimer = null;
+  let events = [], showAllEvents = false, saisies = {}, syntheses = [];
+  const openSyn = new Set(); let synInit = false;
+
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const px = new Intl.NumberFormat('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2});
+  const usd = new Intl.NumberFormat('fr-FR', {style:'currency', currency:'USD', maximumFractionDigits:0});
+  const eur = new Intl.NumberFormat('fr-FR', {style:'currency', currency:'EUR', maximumFractionDigits:0});
+  const pad = n => String(n).padStart(2, '0');
+  const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; };
+  const writable = () => !!db && canWrite !== false;
+
+  function toast(msg){
+    const t = $('#toast'); t.textContent = msg; t.hidden = false;
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 3200);
+  }
+
+  function render(){
+    const d = new Date();
+    $('#today').textContent = d.toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+    $('#status').textContent = db ? 'Connecté au poste de commandement.' : 'Ouvrez cette page sur claude.ai pour charger les ordres.';
+  }
+
+  async function connect(){
+    const c = window.claude;
+    if (c && typeof c.use === 'function'){ try { db = await c.use('db'); } catch { db = null; } }
+    ready = true;
+    render();
+  }
+
+  // Navigation carrousel simple
+  const V = [
+    {id:'introduction', n:'', nom:'Accueil', eye:'Recherche financière / Système de veille', go:'ordres'},
+    {id:'decision', n:'1', nom:'Synthèse des ordres', eye:'Écran 1 / Synthèse · lecture seule', titre:'Synthèse des ordres'},
+    {id:'veille', n:'2', nom:'Veille', eye:'Écran 2 / Veille', titre:'Veille'},
+    {id:'ordres', n:'3', nom:'Espace opérationnel', eye:'Écran 3 / Exécution', titre:'Espace opérationnel'},
+    {id:'exposition', n:'4', nom:'Exposition', eye:'Écran 4 / Risque', titre:'Exposition'}
+  ];
+  
+  const tr = $('#h-track');
+  tr.innerHTML = V.map((v, i) => `<section class="h-slide">
+    <div class="h-eye"><span>${v.eye}</span></div>
+    ${i === 0 ? '<div class="h-h1">HELIOS</div><div class="h-sub">Intelligence des marchés</div><div class="h-rule"></div><div class="h-tag">Voir ce qui fait bouger le marché.</div>' : `<div class="h-h2">${v.nom}</div><div class="h-rule"></div>`}
+    <div class="h-pill"><a class="h-glass" href="#${v.go || v.id}"><span class="h-dot" id="h-d${i}"></span><span class="h-t"><small>Aujourd'hui</small><b>${v.nom}</b></span><span class="h-go">→</span></a></div>
+  </section>`).join('');
+
+  let idx = 0;
+  const maj = () => {
+    idx = Math.max(0, Math.min(4, Math.round(tr.scrollLeft / Math.max(1, tr.clientWidth))));
+    $('#h-num').textContent = idx ? `Écran ${V[idx].n} / 4` : 'Accueil';
+    $('#h-bar').style.left = (idx * 20) + '%';
+    $('#h-prev').disabled = idx === 0; $('#h-next').disabled = idx === 4;
+  };
+  tr.addEventListener('scroll', () => requestAnimationFrame(maj), {passive:true});
+  $('#h-prev').onclick = () => tr.scrollTo({left: (idx - 1) * tr.clientWidth, behavior:'smooth'});
+  $('#h-next').onclick = () => tr.scrollTo({left: (idx + 1) * tr.clientWidth, behavior:'smooth'});
+  $('#h-menu').onclick = () => { $('#h-msheet').hidden = false; };
+  $('#h-mclose').onclick = () => { $('#h-msheet').hidden = true; };
+  $('#h-back').onclick = () => { location.hash = 'accueil'; };
+
+  function route(){
+    let [h] = location.hash.slice(1).split('/');
+    const v = V.find(x => x.id === h && x.titre);
+    const view = h === 'atelier' ? 'atelier' : v ? v.id : 'home';
+    document.body.dataset.view = view;
+    if (view === 'home'){ requestAnimationFrame(() => { tr.scrollLeft = 0; maj(); }); }
+    else {
+      const t = v || {titre:'Atelier', eye:'Atelier / Architecture'};
+      $('#h-crumbt').textContent = t.titre; $('#h-peye').textContent = t.eye; $('#h-ptitle').textContent = t.titre;
+      scrollTo(0, 0);
+    }
+  }
+  addEventListener('hashchange', route); route();
+  connect();
+})();
+</script>
 </body>
 </html>
