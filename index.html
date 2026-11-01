@@ -1,88 +1,9 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Helios - Système de Veille et d'Analyse</title>
-    <style>
-        :root {
-            --bg-color: #050B14;
-            --panel-bg: rgba(11, 19, 38, 0.75);
-            --border-color: rgba(56, 189, 248, 0.2);
-            --accent-cyan: #38BDF8;
-            --text-main: #F1F5F9;
-            --text-muted: #94A3B8;
-        }
-        body {
-            margin: 0;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            padding: 20px;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-        }
-        h1 {
-            color: var(--accent-cyan);
-            font-size: 1.5rem;
-            letter-spacing: 2px;
-            margin: 0;
-        }
-        .panel {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            backdrop-filter: blur(12px);
-            margin-bottom: 20px;
-        }
-        h2 {
-            color: var(--accent-cyan);
-            font-size: 1.1rem;
-            margin-top: 0;
-        }
-        p, li {
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-        .btn {
-            background: var(--accent-cyan);
-            color: var(--bg-color);
-            border: none;
-            padding: 10px 20px;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>H E L I O S</h1>
-            <span>Terminal de Veille</span>
-        </header>
-        <main>
-            <div class="panel">
-                <h2>Architecture de Veille & Système Institutionnel</h2>
-                <p>Carrefour d'analyse de marché : macro, micro, événements, géostratégie, historique, flux, sentiment et technique.</p>
-                <button class="btn" onclick="alert('Système opérationnel prêt pour ProRealTime.')">Lancer l'Espace Opérationnel</button>
-            </div>
-            <div class="panel">
-                <h2>Paramètres et Risque</h2>
-                <p>Gestion stricte du capital, période d'attente et plafonds de perte maximale par position.</p>
-            </div>
-        </main>
-    </div>
-</body>
-</html>
+<!doctype html>
+<html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tableau de bord — Documents</title>
+<style>
+:root{color-scheme:dark;font:15px system-ui;background:#0b1220;color:#e6edf8}body{margin:0}header{padding:24px;background:#111d32;border-bottom:1px solid #30415d}h1{margin:0 0 8px;font-size:24px}button,input,select,textarea{font:inherit;color:inherit;background:#18273e;border:1px solid #405371;border-radius:7px;padding:9px}button{cursor:pointer}button:hover{background:#294569}.tools{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}main{padding:22px;max-width:1500px;margin:auto}nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}.active{background:#2759a0}#stats{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}.stat,article{background:#121f34;border:1px solid #293d59;border-radius:10px;padding:16px}.stat strong{display:block;font-size:25px;color:#7eb7ff}#cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}article{overflow-wrap:anywhere;min-width:0}h3{margin:0 0 12px;color:#a6ceff}dl{margin:0}dt{color:#93a8c8;margin-top:10px;font-size:13px}dd{margin:4px 0;white-space:pre-wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}.muted{color:#9db0ca;font-size:13px}.tag{display:inline-block;padding:4px 8px;background:#253c5b;border-radius:5px;margin-bottom:8px}dialog{background:#101e32;color:#e6edf8;border:1px solid #476083;border-radius:12px;width:min(850px,90vw)}textarea{box-sizing:border-box;width:100%;height:55vh;font:13px monospace}canvas{width:100%;height:180px;margin-top:12px}#status{min-height:20px;color:#9bcbff}label{display:flex;align-items:center;gap:6px}a{color:#93c5ff}
+</style>
+<header><h1>Tableau de bord de suivi</h1><div class="muted">Reconstruction depuis documents.json · Données importées, non vérifiées · Aucun ordre envoyé · Aucun cours en temps réel</div><div class="tools"><button id="importBtn">Importer JSON</button><input type="file" id="file" accept=".json,application/json" hidden><button id="exportBtn">Exporter JSON</button><button id="backupBtn">Sauvegarder dans ce navigateur</button><button id="restoreBtn">Restaurer sauvegarde locale</button></div></header>
+<main><div id="stats"></div><nav id="nav"></nav><div class="tools"><input id="search" placeholder="Rechercher dans les documents…" aria-label="Rechercher"><select id="sort" aria-label="Tri"><option value="id">Identifiant</option><option value="date">Modification récente</option></select></div><p id="status" role="status"></p><div id="cards"></div></main>
+<dialog id="editor"><h2>Modifier un document</h2><p class="muted">Modification locale uniquement. Exportez ensuite votre JSON pour conserver les changements.</p><textarea id="editText" aria-label="Document JSON"></textarea><p id="editError" role="alert"></p><div class="tools"><button id="saveEdit">Valider</button><button id="cancelEdit">Annuler</button></div></dialog>
+<script id="initial" type="application/json">{"documents": [{"collection": "cours", "id": "MPC", "created_at": "2026-10-30T01:42:50.179866+00:00", "updated_at": "2026-10-30T01:42:50.179866+00:00", "data": {"bougies": [["2026-06-09", 264.35, 266.44, 256.5273, 258.15, 3233561], ["2026-06-10", 258.19, 269.3499, 258.19, 263.28, 2109252], ["2026-06-11", 268, 269.7656, 260.06, 260.81, 2072697], ["2026-06-12", 260.91, 267.83, 259.02, 263.58, 1701545], ["2026-06-15", 253.75, 255.96, 248.675, 250.86, 3457029], ["2026-06-16", 247.63, 251.755, 246.78, 250.47, 2687505], ["2026-06-17", 249.81, 250.52, 244.14, 244.61, 2381235], ["2026-06-18", 242.86, 243.36, 238.28, 242.91, 4962727], ["2026-06-22", 242.51, 247.895, 240, 247.29, 1877780], ["2026-06-23", 245.28, 249.67, 244.47, 248.52, 1501616], ["2026-06-24", 243.63, 248.65, 240.2227, 246.51, 1684082], ["2026-06-25", 245.06, 253.73, 244.605, 253.56, 1807156], ["2026-06-26", 252.98, 256.71, 251.455, 254.06, 6961329], ["2026-06-29", 256.61, 265.83, 256.36, 259.22, 2393247], ["2026-06-30", 260.62, 262.08, 254.79, 255.67, 1907652], ["2026-07-01", 257.46, 264.96, 255.01, 264.87, 1872056], ["2026-07-02", 267, 270.4, 264.325, 266.35, 1722195], ["2026-07-06", 266.52, 272.35, 265.38, 268.99, 1720369], ["2026-07-07", 267.65, 269.49, 261.565, 266.33, 1838818], ["2026-07-08", 271.63, 281.25, 270, 280.68, 2467740], ["2026-07-09", 281.43, 283.68, 279.05, 283.3, 1844236], ["2026-07-10", 286.32, 287.147, 277.55, 283.74, 1932683], ["2026-07-13", 290.82, 299.05, 289.54, 296.88, 2146235], ["2026-07-14", 300, 303.69, 296.72, 303.4, 2266011], ["2026-07-15", 301.53, 304.36, 295.21, 299.18, 2325436], ["2026-07-16", 301.99, 308.415, 301.01, 305.85, 1871320], ["2026-07-17", 311.73, 313.15, 306.81, 312.6, 2139401], ["2026-07-20", 312.95, 319.36, 312.95, 315.31, 1589626], ["2026-07-21", 319.26, 321, 315.234, 319.76, 2121114], ["2026-07-22", 326.67, 326.92, 315.68, 315.82, 2589742], ["2026-07-23", 323.4, 323.755, 311.2, 312.27, 2298560], ["2026-07-24", 311.7, 316.49, 308.68, 309.24, 2000765], ["2026-07-27", 306.68, 313.735, 305.39, 312.35, 2378451], ["2026-07-28", 313.19, 315, 305.95, 306.05, 1827596], ["2026-07-29", 312.85, 315.72, 307.39, 308.72, 1605308], ["2026-07-30", 304.9, 316.53, 304.9, 314.08, 1963978], ["2026-07-31", 316.31, 317.4, 311.01, 316.47, 1688679], ["2026-08-03", 311.12, 317.7199, 305.84, 307.03, 2105267], ["2026-08-04", 308.83, 315.12, 301.57, 312.61, 2507173], ["2026-08-05", 314.5, 315.495, 297.37, 297.75, 2778931], ["2026-08-06", 303.17, 303.33, 293.72, 299.25, 1976697], ["2026-08-07", 295.14, 301.49, 290.3601, 298.2, 2300277], ["2026-08-10", 302.2, 320.42, 302.2, 320.32, 4058733], ["2026-08-11", 319, 336.45, 318, 336.42, 3183067], ["2026-08-12", 335.045, 348.35, 331.99, 348.25, 2977412], ["2026-08-13", 345.4, 357.195, 344, 356.37, 2232907], ["2026-08-14", 356.99, 360.1, 352.48, 355.42, 2188507], ["2026-08-17", 358.57, 363.3425, 355.265, 358.18, 3043639], ["2026-08-18", 363.06, 367.24, 356.93, 366.21, 2033776], ["2026-08-19", 365.21, 365.865, 359.0001, 360.75, 2398504], ["2026-08-20", 363.375, 367.595, 356.69, 358.23, 2895839], ["2026-08-21", 358.875, 365.21, 357.75, 360.72, 2236553], ["2026-08-24", 359.78, 367.5, 357.97, 362.52, 2169111], ["2026-08-25", 358.34, 361.97, 354.62, 354.88, 2205706], ["2026-08-26", 350.79, 365.32, 347.67, 362.27, 2089976], ["2026-08-27", 362.79, 366.65, 356.41, 363.54, 3019978], ["2026-08-28", 363.74, 369.12, 363.15, 368.83, 1919203], ["2026-08-31", 374.24, 376.559, 366.6814, 373.32, 3627294], ["2026-09-01", 380.78, 383.01, 373, 383, 2379504], ["2026-09-02", 380.37, 391.98, 380.04, 387, 2399410], ["2026-09-03", 383.95, 398.5246, 382.92, 387.71, 2136586], ["2026-09-04", 386.1, 391, 379.1, 388.9, 1875286], ["2026-09-08", 396.5, 399.62, 395.055, 397.77, 1845899], ["2026-09-09", 401.58, 402, 393.54, 399.44, 1975042], ["2026-09-10", 405.01, 405.13, 392.22, 392.42, 2568873], ["2026-09-11", 394.99, 409.11, 394.24, 395.93, 2359194], ["2026-09-14", 401, 409.5, 388.1581, 396.45, 3572623], ["2026-09-15", 397.69, 413.28, 396.76, 410.84, 2878051], ["2026-09-16", 405.31, 419.39, 402.66, 413.92, 2869852], ["2026-09-17", 408.76, 423.83, 407, 421.96, 2695260], ["2026-09-18", 420.27, 428, 419.15, 424.89, 9859692], ["2026-09-21", 419.01, 431.08, 399.55, 402.38, 4451101], ["2026-09-22", 391.68, 404.7, 386.9543, 389.68, 4704788], ["2026-09-23", 393.05, 400.72, 378.8, 388.38, 4184609], ["2026-09-24", 394.14, 401.085, 387.735, 390.95, 2091000], ["2026-09-25", 385, 394.87, 380.775, 393.52, 1939352], ["2026-09-28", 396, 398.33, 387.07, 389.44, 2669659], ["2026-09-29", 382.28, 394.23, 380, 392.03, 1898904], ["2026-09-30", 398.05, 404.07, 393.7, 395.42, 1649011], ["2026-10-01", 393.21, 420.73, 392.83, 420.15, 2116828], ["2026-10-02", 415.88, 424.67, 405.57, 422.33, 2167626], ["2026-10-05", 422.8, 437.67, 421.075, 433.47, 2124176], ["2026-10-06", 428.45, 435.6899, 427.2, 432.36, 1570295], ["2026-10-07", 435.58, 444.99, 435, 442.26, 1924419], ["2026-10-08", 449.45, 467.85, 447.59, 463.34, 2751116], ["2026-10-09", 461.04, 469.9999, 450.3801, 455.03, 1967872], ["2026-10-12", 461.86, 468.42, 454.5141, 458.81, 1519925], ["2026-10-13", 464, 477.73, 462.41, 476.98, 1645574], ["2026-10-14", 480, 485.22, 473.56, 484.92, 1635297], ["2026-10-15", 481.2, 481.55, 469.07, 476.92, 2082554], ["2026-10-16", 480.61, 484.25, 470.5601, 478.07, 1801775], ["2026-10-19", 478, 493.98, 470.68, 473.69, 1926672], ["2026-10-20", 471.95, 476.98, 464, 475.04, 1917527], ["2026-10-21", 473.17, 478.9394, 458.6919, 467.98, 2207663], ["2026-10-22", 473, 473.06, 448.38, 459.28, 2596816], ["2026-10-23", 463.4, 465.549, 454.19, 457.22, 1461704], ["2026-10-26", 457.43, 478.365, 457.175, 470.64, 1455894], ["2026-10-27", 466.66, 468.85, 434.235, 435.98, 2946240], ["2026-10-28", 438.97, 444.445, 433.575, 440.77, 2544623], ["2026-10-29", 446.2, 447, 419.2769, 432.51, 2385383]], "maj_le": "2026-10-30", "source": "Alpha Vantage TIME_SERIES_DAILY (compact, 100 séances)", "unite": "Journalier"}}, {"collection": "cours", "id": "NTAP", "created_at": "2026-10-30T01:42:50.168650+00:00", "updated_at": "2026-10-30T01:42:50.168650+00:00", "data": {"bougies": [["2026-06-09", 171.82, 171.9075, 160.0066, 165, 2725817], ["2026-06-10", 163.48, 166.11, 160.56, 160.66, 3176974], ["2026-06-11", 160.91, 161.61, 157.06, 160.47, 2463394], ["2026-06-12", 159.5, 163.06, 156.41, 161.61, 1774823], ["2026-06-15", 163.15, 164.15, 159.18, 161.82, 3001712], ["2026-06-16", 162.065, 163.9999, 157.4, 161.26, 2494526], ["2026-06-17", 161.51, 161.765, 154.01, 154.81, 2292724], ["2026-06-18", 158.64, 161.17, 153.33, 159.71, 8151500], ["2026-06-22", 159.8, 164.6599, 157.31, 158.31, 3590381], ["2026-06-23", 154.56, 159.2, 152.33, 157.82, 3274165], ["2026-06-24", 156.4, 157.56, 151.36, 155.56, 2786555], ["2026-06-25", 157.43, 158, 152.53, 154.59, 2076771], ["2026-06-26", 154.155, 154.71, 149.2727, 152.45, 3318904], ["2026-06-29", 153.26, 156.05, 151.38, 155.06, 1742833], ["2026-06-30", 154.365, 156.15, 151.13, 154.76, 2532806], ["2026-07-01", 155.024, 160.289, 153.1, 156.38, 4005646], ["2026-07-02", 155.86, 159.78, 153.16, 154.17, 1931127], ["2026-07-06", 155.24, 163.9, 155.13, 163.55, 3630873], ["2026-07-07", 163.55, 167.72, 163.125, 165.78, 3664838], ["2026-07-08", 162.735, 16
